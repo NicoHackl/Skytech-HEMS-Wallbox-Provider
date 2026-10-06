@@ -21,8 +21,8 @@ HEMS zu beheben.
 Geprüfte Grundlagen:
 
 - [Umsetzungsplan V1](plan_v1.md)
-- [Vertrag im Wallbox-Provider](contract/contract_hems_wallbox_provider.md)
-- [Vertrag im HEMS](../SkytechHEMS/contract/contract_hems_wallbox_provider.md)
+- [Vertrag im Wallbox-Provider](contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md)
+- [Vertrag im HEMS](../SkytechHEMS/contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md)
 - HEMS-Code für regelbare Geräte, Regelzyklen, HA-Schreibzugriffe und Notabschaltung
 - HEMS-Dokumentation einschließlich bekannter Lücken
 - Battery-Provider-Bridge als vorhandene Architekturvorlage

@@ -11,7 +11,7 @@ Wallboxbefehle sowie die Veröffentlichung normalisierter Mess- und Diagnose-Ent
 Überschussregelung bleibt vollständig im HEMS.
 
 Der verbindliche Austauschvertrag liegt in
-[`contract/contract_hems_wallbox_provider.md`](contract/contract_hems_wallbox_provider.md).
+[`contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md`](contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md).
 
 ## V1-Umfang
 
