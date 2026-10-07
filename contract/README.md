@@ -21,4 +21,4 @@ Beschreibung der gemeinsamen Felder zu führen.
 
 | Gegenstelle | Vertrag | Stand / Hinweise |
 |---|---|---|
-| HEMS | [contract_hems_wallbox_provider.md](contract_hems_wallbox_provider/contract_hems_wallbox_provider.md) | Entwurf für V1; offene Fragen und technische Befunde stehen in ../review_open_questions.md. |
+| HEMS | [contract_hems_wallbox_provider.md](contract_hems_wallbox_provider/contract_hems_wallbox_provider.md) | Entwurf, Version 1.1 (07.10.2026); Umsetzung: [umsetzungsplan.md](../umsetzungsplan.md). |
