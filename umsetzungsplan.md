@@ -1,6 +1,6 @@
 # Umsetzungsplan — Wallbox Provider, HEMS und Battery-Provider
 
-**Stand:** 07.10.2026
+**Stand:** 07.10.2026 — AP-0 bis AP-7 umgesetzt, AP-8 (Hardware) offen
 **Grundlage:** [Vertrag HEMS ↔ Wallbox-Provider, Version 1.1](contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md),
 [Vertrag HEMS ↔ Battery-Provider, Version 1.1](../Skytech-HEMS-Battery-Provider/contract/contract_hems_battery_provider/contract_hems_battery_provider.md),
 [plan_v1.md](plan_v1.md), [offene_fragen_antworten.md](offene_fragen_antworten.md)
@@ -50,15 +50,15 @@ Schnittstelle: Der Status im Vertrag wird erst nach umgesetzter und getesteter �
 ## 2. Reihenfolge
 
 ```text
-AP-0  HEMS-Bug T-01                      ✔ erledigt (SkytechHEMS 23856d8)
-AP-1  Verträge, Plan, Doku               ✔ dieses Arbeitspaket (alle drei Repos)
-AP-2  HEMS: Lebenszeichen                 Abhängigkeit für AP-3, AP-5
-AP-3  Battery-Provider: Lebenszeichen     parallel zu AP-4 möglich
-AP-4  Wallbox-Provider V1, lesend         Phase 1–2 aus plan_v1.md
-AP-5  Wallbox-Provider: Steuerung         Phase 3–4, benötigt AP-2
-AP-6  HEMS: ungültige Istleistung → 0 A   unabhängig, vor Hardware-Abnahme
-AP-7  Wallbox-Provider: Phasenwechsel     Phase 5
-AP-8  Hardware-Abnahme                    Phase 6, Freigabe
+AP-0  HEMS-Bug T-01                      ✔ SkytechHEMS 23856d8
+AP-1  Verträge, Plan, Doku               ✔ alle drei Repos
+AP-2  HEMS: Lebenszeichen                 ✔ SkytechHEMS f2037f4 (D-062)
+AP-3  Battery-Provider: Lebenszeichen     ✔ Battery-Provider f353d0c (D-016)
+AP-4  Wallbox-Provider V1, lesend         ✔ Software, Hardware offen
+AP-5  Wallbox-Provider: Steuerung         ✔ Software, Hardware offen
+AP-6  HEMS: ungültige Istleistung → 0 A   ✔ SkytechHEMS f2037f4
+AP-7  Wallbox-Provider: Phasenwechsel     ✔ Software, psm-Werte an Hardware zu bestätigen
+AP-8  Hardware-Abnahme                    offen — docs/hardware-abnahme.md
 ```
 
 ## 3. Arbeitspakete
@@ -66,7 +66,7 @@ AP-8  Hardware-Abnahme                    Phase 6, Freigabe
 Je Repository: eigener Commit nach dessen Konvention, Changelog- und Doku-Eintrag im selben
 Arbeitspaket, Vertragskopien wortgleich (`diff` leer), Commits nennen die Gegenstelle.
 
-### AP-1 — Verträge, Plan, Doku (erledigt mit diesem Dokument)
+### AP-1 — Verträge, Plan, Doku (erledigt)
 
 - Wallbox-Vertrag auf Version 1.1: Statuskennzeichnung, Betriebsart, Lebenszeichen,
   Phasenbetrieb, Befehlsfolge, bekannte Grenzen, Parameternamen angeglichen.
@@ -114,9 +114,8 @@ Branch dieses Repos: `agent/main` (siehe dessen `AGENTS.md`).
 
 Entspricht `plan_v1.md` Phase 1 und 2.
 
-- Projektgrundlage: `AGENTS.md` (nach dem Muster des Battery-Providers), Changelog, `docs/`,
-  HACS/Manifest, Tests. Branch-Regel vor dem ersten Code festlegen (aktuell Branch
-  `agent/contracts`).
+- Projektgrundlage: `AGENTS.md` (nach dem Muster des Battery-Providers, Branch `agent/main`),
+  Changelog, `docs/`, HACS/Manifest, Tests.
 - `WallboxAdapter`, `WallboxState`, `WallboxAdapterError`; `GoeModbusAdapter.read()` mit korrigierter
   Registertabelle (Adresse = Register − 30001), unabhängige Rohdatentests.
 - Config Flow (Name, Host, Port, Intervall, `hems_entity_prefix`, `phasenbetrieb`), stabile Unique

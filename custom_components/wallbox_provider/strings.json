@@ -1,0 +1,161 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Wallbox hinzufügen",
+        "description": "go-e Charger im lokalen Netzwerk. Modbus TCP muss in der go-e-App aktiviert sein (Internet → Erweiterte Einstellungen).",
+        "data": {
+          "display_name": "Anzeigename (optional) — daraus entstehen die Namen der Entities",
+          "host": "IP-Adresse",
+          "port": "Modbus-Port",
+          "unit_id": "Modbus-Geräteadresse",
+          "hems_entity_prefix": "SkytechHEMS-Präfix (optional, z. B. \"wallbox\") — bindet die Wallbox an SkytechHEMS an. Leer lassen, wenn sie nur von Hand gesteuert wird.",
+          "phase_mode": "Phasenbetrieb",
+          "update_interval_seconds": "Abfrageintervall (Sekunden, 1–60)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Die Wallbox antwortet unter dieser Adresse nicht. IP-Adresse, Port und die Modbus-Freigabe in der go-e-App prüfen.",
+      "unsupported_firmware": "Die Firmware der Wallbox wird nicht unterstützt. Bitte in der go-e-App auf mindestens 55.6 aktualisieren (nicht 60.3).",
+      "invalid_update_interval": "Abfrageintervall muss zwischen 1 und 60 Sekunden liegen."
+    },
+    "abort": {
+      "already_configured": "Diese Wallbox ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Einstellungen ändern",
+        "description": "Änderungen wirken sofort, ohne Neustart.",
+        "data": {
+          "update_interval_seconds": "Abfrageintervall (Sekunden, 1–60)",
+          "keepalive_seconds": "Sollwert erneut senden alle … Sekunden (5–300)",
+          "hems_timeout_factor": "Frist ohne HEMS-Lebenszeichen (Vielfaches der HEMS-Zykluszeit, 2–10). Danach wird das Laden gestoppt."
+        }
+      }
+    },
+    "error": {
+      "invalid_update_interval": "Abfrageintervall muss zwischen 1 und 60 Sekunden liegen.",
+      "invalid_keepalive": "Der Wert muss zwischen 5 und 300 Sekunden liegen.",
+      "invalid_hems_timeout_factor": "Der Faktor muss zwischen 2 und 10 liegen."
+    }
+  },
+  "selector": {
+    "phase_mode": {
+      "options": {
+        "automatisch": "Automatisch 1/3 Phasen (SkytechHEMS entscheidet)",
+        "fest_1": "Fest einphasig",
+        "fest_3": "Fest dreiphasig"
+      }
+    }
+  },
+  "exceptions": {
+    "invalid_manual_current": {
+      "message": "Der Ladestrom muss 0 oder mindestens {minimum} A sein, in ganzen Ampere."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "istleistung": {
+        "name": "Istleistung"
+      },
+      "spannung_l1": {
+        "name": "Spannung L1"
+      },
+      "spannung_l2": {
+        "name": "Spannung L2"
+      },
+      "spannung_l3": {
+        "name": "Spannung L3"
+      },
+      "ladestrom_l1": {
+        "name": "Ladestrom L1"
+      },
+      "ladestrom_l2": {
+        "name": "Ladestrom L2"
+      },
+      "ladestrom_l3": {
+        "name": "Ladestrom L3"
+      },
+      "aktuelle_phasenanzahl": {
+        "name": "Aktuelle Phasenanzahl"
+      },
+      "wallbox_status": {
+        "name": "Wallbox-Status",
+        "state": {
+          "unbekannt": "Unbekannt",
+          "bereit": "Bereit, kein Fahrzeug",
+          "laedt": "Lädt",
+          "wartet_auf_fahrzeug": "Wartet auf Fahrzeug",
+          "ladung_beendet": "Ladung beendet",
+          "fehler": "Fehler"
+        }
+      },
+      "fehler": {
+        "name": "Fehler",
+        "state": {
+          "kein_fehler": "Kein Fehler",
+          "fehlerstrom": "Fehlerstrom",
+          "phasenfehler": "Phasenfehler",
+          "ueberspannung": "Überspannung",
+          "ueberstrom": "Überstrom",
+          "erdung": "Erdung fehlt",
+          "schuetz": "Schütz gestört",
+          "uebertemperatur": "Übertemperatur",
+          "kabelverriegelung": "Kabelverriegelung gestört",
+          "sonstiger_fehler": "Sonstiger Fehler"
+        }
+      },
+      "ladeenergie_sitzung": {
+        "name": "Ladeenergie Sitzung"
+      },
+      "ladeenergie_gesamt": {
+        "name": "Ladeenergie gesamt"
+      },
+      "hems_soll_ladestrom": {
+        "name": "HEMS-Soll-Ladestrom"
+      },
+      "hems_soll_phasenanzahl": {
+        "name": "HEMS-Soll-Phasenanzahl"
+      },
+      "steuerung": {
+        "name": "Steuerung",
+        "state": {
+          "hems": "HEMS steuert",
+          "manuell": "Manuell",
+          "kein_hems_lebenszeichen": "Gestoppt: kein Lebenszeichen vom HEMS",
+          "ungueltiger_sollwert": "Gestoppt: ungültiger Sollwert vom HEMS",
+          "schreibfehler": "Wallbox nimmt keine Befehle an"
+        }
+      }
+    },
+    "binary_sensor": {
+      "fahrzeug_verbunden": {
+        "name": "Fahrzeug verbunden"
+      },
+      "laedt": {
+        "name": "Lädt"
+      },
+      "hems_lebenszeichen": {
+        "name": "HEMS-Lebenszeichen"
+      }
+    },
+    "switch": {
+      "hems_steuerung_aktiv": {
+        "name": "HEMS Steuerung"
+      }
+    },
+    "number": {
+      "manueller_ladestrom": {
+        "name": "Manueller Ladestrom"
+      }
+    },
+    "select": {
+      "manuelle_phasenanzahl": {
+        "name": "Manuelle Phasenanzahl"
+      }
+    }
+  }
+}

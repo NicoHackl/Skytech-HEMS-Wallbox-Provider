@@ -1,0 +1,12 @@
+{
+  "domain": "wallbox_provider",
+  "name": "Skytech HEMS Wallbox Provider",
+  "codeowners": ["@NicoHackl"],
+  "config_flow": true,
+  "documentation": "https://github.com/NicoHackl/Skytech-HEMS-Wallbox-Provider",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/NicoHackl/Skytech-HEMS-Wallbox-Provider/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
