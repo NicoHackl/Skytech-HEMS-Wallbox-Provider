@@ -1,5 +1,10 @@
 # Umsetzungsplan V1 — Skytech HEMS Wallbox Provider
 
+**Stand:** 07.10.2026 (überarbeitet nach Beantwortung von `offene_fragen_antworten.md`)
+
+Die projektübergreifende Reihenfolge, die Arbeitspakete je Repository und die Abnahmekriterien
+stehen in [umsetzungsplan.md](umsetzungsplan.md). Dieses Dokument beschreibt den Provider selbst.
+
 ## Ziel
 
 Eine Home-Assistant-Custom-Integration bereitstellen, die zunächst einen **go-e Charger Gemini
@@ -11,26 +16,33 @@ Wallboxbefehle sowie die Veröffentlichung normalisierter Mess- und Diagnose-Ent
 Überschussregelung bleibt vollständig im HEMS.
 
 Der verbindliche Austauschvertrag liegt in
-[`contract/contract_hems_wallbox_provider.md`](contract/contract_hems_wallbox_provider.md).
+[`contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md`](contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md).
 
 ## V1-Umfang
 
 - Home-Assistant-Custom-Integration mit einem Config Flow.
 - Ein Hersteller × ein Protokoll: **go-e Charger Gemini × lokales Modbus TCP**.
-- Eingebaute optionale SkytechHEMS-Anbindung über `hems_entity_prefix`.
+- Eingebaute optionale SkytechHEMS-Anbindung über `hems_entity_prefix`, mit Betriebsart
+  `HEMS`/`manuell` (Schalter "HEMS Steuerung") und Auswertung des HEMS-Lebenszeichens.
+- Konfigurierbares Phasenverhalten `automatisch`, `fest_1`, `fest_3`.
+- Erneutes Schreiben des wirksamen Sollwerts alle `keepalive_s` (Standard 30 s, konfigurierbar).
 - Normalisierte Istleistungs-, Spannungs-, Strom-, Status-, Fehler- und Energie-Entities.
 - Regelung des Ladestroms in ganzen Ampere, inklusive sicherem Stopp bei `0 A`.
-- Optionaler 1-/3-Phasenwechsel mit Bestätigung der tatsächlich geschalteten Phasen.
+- Optionaler 1-/3-Phasenwechsel; der Provider reicht Phase und Strom nacheinander durch
+  (Phasenmodus, Strom, Freigabe), ohne Übergangswert und ohne Bestätigung der aktiven Phasen.
 - HEMS-Steuerungsschalter und Sensoren für zuletzt erfolgreich übertragene HEMS-Sollwerte.
 - Unit-, Adapter- und HEMS-Bridge-Tests sowie ein dokumentierter Hardware-Abnahmekatalog.
 
 Nicht Teil von V1:
 
-- Änderungen an SkytechHEMS oder eine neue HEMS-Geräteklasse `wallbox`.
+- Eine neue HEMS-Geräteklasse `wallbox`. (Notwendige Änderungen an SkytechHEMS sind dagegen
+  Teil des Vorhabens, siehe [umsetzungsplan.md](umsetzungsplan.md).)
+- RFID-Auswertung und Autorisierung (Folgeversion, optional über ein HA-Ereignis).
 - Cloud API, MQTT, OCPP oder mehrere gleichzeitige go-e-Protokolle.
 - Mehrfachwallbox-Lastmanagement.
 - Fahrzeug-SoC, Abfahrtszeit, Ladeziel oder Hersteller-Cloud.
-- Konfiguration von RFID, Tarifen, Schedulern oder PV-Modi in der go-e-App.
+- Konfiguration von RFID, Tarifen, Schedulern oder PV-Modi in der go-e-App. Es gibt keine
+  konkurrierende Steuerung neben dem HEMS.
 - Eigene Weboberfläche außerhalb der Standard-Home-Assistant-Entities.
 
 ## Architektur
@@ -84,21 +96,30 @@ Adapter-Exception gemeldet; sie werden weder geraten noch still geschluckt.
 Der Gemini wird lokal per Modbus TCP angebunden. Der Nutzer aktiviert Modbus in der go-e-App und
 stellt eine feste IP-Adresse beziehungsweise eine stabile DHCP-Zuordnung bereit.
 
-V1 nutzt insbesondere:
+V1 nutzt insbesondere die folgenden Register. Die **Telegrammadresse** ist die Registernummer
+minus 30001 (Lese-Register) beziehungsweise minus 40001 (Schreib-Register). Im Adapter wird je Feld
+Adresse, Länge, Datentyp, Byte-/Wortreihenfolge und Umrechnung festgehalten; Tests verwenden
+unabhängige Rohdatenbeispiele, damit eine falsche Adresskonstante nicht in Test und
+Implementierung gleichermaßen bestätigt wird.
 
-| Zweck | go-e Modbus-Register |
-|---|---|
-| Fahrzeugstatus | 30101 |
-| Fehler | 30108 |
-| Spannungen L1–L3 | 30109–30113 |
-| Ströme L1–L3 | 30114–30119 |
-| Gesamtleistung | 30120–30121 |
-| Gesamtenergie | 30128–30129 |
-| Sitzungsenergie | 30132–30133 |
-| aktive Phasen | 30205 |
-| flüchtiger Ladestrom | 40300 |
-| Phasenmodus | 40333 |
-| Ladefreigabe/Force-State | 40338 |
+| Zweck | Registerbezeichnung | Telegrammadresse |
+|---|---|---|
+| Fahrzeugstatus | 30101 | 100 |
+| Fehler | 30108 | 107 |
+| Spannungen L1–L3 | 30109–30114 | 108–113 |
+| Ströme L1–L3 | 30115–30120 | 114–119 |
+| Gesamtleistung | 30121–30122 | 120–121 |
+| Gesamtenergie | 30129–30130 | 128–129 |
+| Sitzungsenergie | 30133–30134 | 132–133 |
+| aktive Phasen (Bitmaske) | 30206 | 205 |
+| flüchtiger Ladestrom | 40300 | 299 |
+| Phasenmodus | 40333 | 332 |
+| Ladefreigabe/Force-State (`frc`: 0 Neutral, 1 Aus, 2 Ein) | 40338 | 337 |
+
+Offene Prüfpunkte vor der Freigabe: Adressen und Längen von Fahrzeugstatus und Fehler gegen die
+Herstellerdokumentation (go-e Modbus) bestätigen; Phasenmodus ab Firmware 55.5, Force-State ab
+55.6; Firmware 60.3 hat einen Byte-Reihenfolgefehler (behoben in 60.4) — die Firmware wird beim
+Verbindungstest geprüft und ein bekannt fehlerhafter Stand abgelehnt oder gewarnt.
 
 Wichtig: Der Ladestrom wird ausschließlich über das flüchtige Register 40300 gesetzt. Das
 persistente Register 40301 ist für die laufende Überschussregelung ausgeschlossen, damit keine
@@ -136,50 +157,61 @@ zu `unavailable`, nicht zu scheinbar 0 W.
 
 ### 3. Direkte Wallboxsteuerung
 
-- `apply_control()` implementieren: `0 A` unterbindet das Laden, ein gültiger positiver Wert
-  setzt den flüchtigen Strom und gibt nach der festgelegten Steuerpolitik frei.
+- `apply_control()` implementieren: `0 A` setzt die Freigabe auf Aus (`frc` = 1) und lässt den
+  gespeicherten Strom unverändert; ein gültiger positiver Wert setzt den flüchtigen Strom und
+  danach die Freigabe auf Ein (`frc` = 2). Die Steuerpolitik ist damit festgelegt, eine
+  RFID-Prüfung entfällt in V1.
 - Eingaben strikt validieren: nur `0` oder ganze Ampere innerhalb der vom Gemini unterstützten
   Grenzen. Ungültige Werte werden nie zu einem anderen positiven Sollwert umgedeutet.
 - Schreibbestätigung und anschließenden Statusabgleich getrennt behandeln.
 - Nach Wiederverbindung oder Charger-Neustart den zuletzt aktuellen HEMS-Schnappschuss neu
   übernehmen.
+- Den wirksamen Sollwert alle `keepalive_s` erneut schreiben (Standard 30 s, Bereich 5–300 s);
+  ein Schreibfehler bleibt sichtbar, bis ein Schreibvorgang gelingt.
 
 **Abnahme:** 0, 6 und 16 A werden korrekt übersetzt; 1–5 A, negative, nicht-numerische und zu
 große Werte führen zu sicherem Nichtladen und verständlicher Diagnose.
 
 ### 4. SkytechHEMS-Bridge
 
-- Die beiden HEMS-Sollwerthelfer gemäß Vertrag beobachten.
-- Änderungen in einem kurzen Debounce-Fenster bündeln und anschließend einen konsistenten
-  Schnappschuss anwenden.
-- `switch.<provider_prefix>_hems_steuerung_aktiv` implementieren: aus pausiert nur die
-  automatische Bridge; nach Einschalten erfolgt sofort eine Synchronisierung.
-- `sensor.<provider_prefix>_hems_soll_ladestrom` und optional
-  `sensor.<provider_prefix>_hems_soll_phasenanzahl` aus einem eigenen
-  `HemsCommandState` bereitstellen.
-- Der Wert wird erst nach erfolgreicher Übertragung aktualisiert; ein Schreibfehler macht den
-  HEMS-Sollwertsensor nicht verfügbar.
+- Die beiden HEMS-Sollwerthelfer und `sensor.skytech_hems_status` (Lebenszeichen) gemäß Vertrag
+  beobachten. Die Auswertung des Lebenszeichens misst mit der Provider-Uhr (`hems_timeout_faktor`,
+  Standard 3) und gilt erst nach einer Änderung des Zählers nach dem Provider-Start als frisch.
+- Den wirksamen Sollwert bilden: Betriebsart `manuell` → manuelle Entities; Betriebsart `HEMS` →
+  Schnappschuss bei frischem Lebenszeichen, sonst Stopp.
+- Kein Debounce als Transaktionsersatz; stattdessen vor jedem Einzelschritt den aktuellen
+  Schnappschuss prüfen. Ein Stopp verwirft alle ausstehenden positiven Schritte.
+- `switch.<provider_prefix>_hems_steuerung_aktiv` ("HEMS Steuerung", an = `HEMS`, aus = `manuell`),
+  `number.<provider_prefix>_manueller_ladestrom` und `select.<provider_prefix>_manuelle_phasenanzahl`
+  implementieren. Standard nach Neustart: an.
+- `binary_sensor.<provider_prefix>_hems_lebenszeichen`,
+  `sensor.<provider_prefix>_hems_soll_ladestrom` und optional
+  `sensor.<provider_prefix>_hems_soll_phasenanzahl` aus einem eigenen `HemsCommandState`
+  bereitstellen. Ein Wert wird erst nach erfolgreicher Übertragung aktualisiert.
+- Konfiguration: `phasenbetrieb` (`automatisch`, `fest_1`, `fest_3`), `keepalive_s`,
+  `hems_timeout_faktor`.
 
 **Abnahme:** Das HEMS kann ohne Änderung im bestehenden Ampere-`controllable`-Vertrag eine
-Wallbox steuern. Der Provider schreibt dabei niemals `input_number.ems_*` zurück.
+Wallbox steuern. Der Provider schreibt dabei niemals `input_number.ems_*` zurück. Ohne frisches
+Lebenszeichen stoppt der Provider und nimmt nach einem frischen Zyklus automatisch wieder auf.
 
 ### 5. Phasenwechsel
 
 - Die go-e-Zuordnung der Phasenmoduswerte zunächst an echter Gemini-Hardware prüfen und als
   getestete Adapterkonstante dokumentieren. Die öffentliche go-e-Dokumentation nennt den Wertebereich,
   beschreibt die Semantik aber nicht vollständig.
-- Vor dem Wechsel Strom- und Phasenwunsch bündeln.
-- Den Strom auf einen sicheren Übergangswert begrenzen, die Wallbox jedoch nicht zusätzlich durch
-  einen externen Stop-/Start-Zyklus unterbrechen.
-- Phasenwechsel beauftragen, die hinter dem Schütz gemessenen Phasen abwarten und erst danach den
-  neuen Stromsollwert setzen.
-- Bei Timeout, Fehler oder unerwarteter Phasenzahl: Stromanstieg verhindern, sicheren Zustand
-  herstellen und Fehler sichtbar machen.
-- Nachfolgende HEMS-Änderungen während des Übergangs sammeln und nur den neuesten Schnappschuss
-  abarbeiten.
+- Bei `phasenbetrieb: automatisch` und geänderter Phasenzahl: Phasenmodus setzen, danach Strom
+  setzen, danach Freigabe auf Ein. Keine Zwischenstromstufe, keine Bestätigung der aktiven Phasen
+  als Voraussetzung ("durchreichen").
+- `aktuelle_phasenanzahl` bleibt reine Diagnose; Abweichungen bei offenem Schütz sind kein Fehler.
+- Bei `fest_1`/`fest_3` wird der Phasenmodus nie geschrieben.
+- Ungültige oder fehlende Phasenzahl bei `automatisch`: der ganze Schnappschuss ist ungültig → Stopp.
+- Ein Stopp hat in jedem Schritt Vorrang; ausstehende positive Schritte entfallen.
 
 **Abnahme:** 1→3 und 3→1 funktionieren mit einem geeigneten Fahrzeug wiederholt, ohne zusätzliche
-vom Provider ausgelöste Ladeunterbrechung. Die Umschaltsperre des HEMS verhindert Flattern.
+vom Provider ausgelöste Ladeunterbrechung. Die Umschaltsperre des HEMS verhindert Flattern. Ein
+nach erfolgreicher Phase fehlgeschlagener Stromschritt wird durch das erneute Schreiben nach
+`keepalive_s` korrigiert.
 
 ### 6. Hardware-Abnahme und Freigabe
 
@@ -188,8 +220,10 @@ Vor der produktiven Freigabe sind mit dem echten Gemini und mindestens einem Fah
 1. Start, Stromänderungen 6–16 A und Stopp bei 0 A.
 2. Verhalten nach Provider-, Home-Assistant- und Wallbox-Neustart.
 3. 1→3 und 3→1 Phasenwechsel bei angemessenem Überschuss.
-4. Verhalten bei RFID-/Zugangskontrolle; die V1-Steuerpolitik darf keine ungewollte
-   Autorisierung umgehen.
+   Zusätzlich: HEMS gestoppt (Lebenszeichen bleibt aus), Provider- und HA-Neustart mit altem
+   positiven Sollwert, Umschalten zwischen `HEMS` und `manuell`.
+4. Bestätigen, dass `frc` = 2 und `frc` = 1 mit dem Fahrzeug wie erwartet starten und stoppen.
+   RFID wird in V1 nicht genutzt und ist an der Wallbox deaktiviert.
 5. Netzwerkverlust während Lesen, Schreiben und Phasenwechsel.
 6. Fehlerzustand, Abbruch und Wiederanlauf.
 7. Kein Konflikt mit gleichzeitig aktivierter go-e-App-PV-, Scheduler- oder Fremdsteuerung.

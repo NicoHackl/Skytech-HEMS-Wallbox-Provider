@@ -2,7 +2,11 @@
 
 **Dokumentstand:** 03.10.2026  
 **Grundlage:** Prüfung vom 02.10.2026  
-**Status:** Entscheidungsgrundlage; offene Fragen sind noch nicht beantwortet.
+**Status:** Historische Entscheidungsgrundlage. Die Fragen F-01 bis F-12 sind am 07.10.2026 in
+[offene_fragen_antworten.md](offene_fragen_antworten.md) beantwortet; die Entscheidungen stehen im
+[Vertrag](contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md) (Version 1.1),
+in [plan_v1.md](plan_v1.md) und in [umsetzungsplan.md](umsetzungsplan.md). T-01 ist im HEMS
+behoben (SkytechHEMS `23856d8`). Der Text unten bleibt unverändert als Befundstand vom 03.10.2026.
 
 ## 1. Zweck und Gesamtbewertung
 
@@ -21,8 +25,8 @@ HEMS zu beheben.
 Geprüfte Grundlagen:
 
 - [Umsetzungsplan V1](plan_v1.md)
-- [Vertrag im Wallbox-Provider](contract/contract_hems_wallbox_provider.md)
-- [Vertrag im HEMS](../SkytechHEMS/contract/contract_hems_wallbox_provider.md)
+- [Vertrag im Wallbox-Provider](contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md)
+- [Vertrag im HEMS](../SkytechHEMS/contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md)
 - HEMS-Code für regelbare Geräte, Regelzyklen, HA-Schreibzugriffe und Notabschaltung
 - HEMS-Dokumentation einschließlich bekannter Lücken
 - Battery-Provider-Bridge als vorhandene Architekturvorlage
