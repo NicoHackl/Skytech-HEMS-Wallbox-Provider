@@ -61,7 +61,7 @@ async def test_alter_positiver_sollwert_beim_start_startet_nicht(
 ) -> None:
     hass.states.async_set(PHASE_ENTITY, "3")
     hass.states.async_set(CURRENT_ENTITY, "10")
-    hass.states.async_set(STATUS_ENTITY, "57", {"zyklus_intervall_s": 30})
+    hass.states.async_set(STATUS_ENTITY, "", {"zyklus_zaehler": 57, "zyklus_intervall_s": 30})
     entry, adapter = await setup_entry(hass, monkeypatch)
     assert adapter.calls == [("allow", False)]
 

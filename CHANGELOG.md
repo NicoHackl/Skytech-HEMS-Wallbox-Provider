@@ -10,6 +10,13 @@ Einträge werden aus **Nutzersicht** formuliert.
 
 ## Unveröffentlicht
 
+### Geändert — 20.10.2026
+
+- Das Lebenszeichen von SkytechHEMS kommt jetzt aus dessen Sensor „HEMS-Schnittstelle“
+  (`sensor.hems_schnittstelle`) statt aus `sensor.skytech_hems_status`. **SkytechHEMS ab 3.0.0
+  und diese Integration müssen zusammen aktualisiert werden** — sonst sieht die Wallbox kein
+  Lebenszeichen und bleibt gestoppt.
+
 ### Hinzugefügt — 07.10.2026
 
 - **Erste Version für go-e Charger Gemini** über lokales Modbus TCP. Beim Einrichten werden

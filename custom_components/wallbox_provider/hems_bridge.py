@@ -6,7 +6,8 @@ Abschnitte, die hier umgesetzt sind:
 - **Betriebsart** (D-005): Schalter „HEMS Steuerung" an → Sollwert aus den zwei HEMS-Helfern;
   aus → aus den manuellen Entities. Ohne HEMS-Präfix immer manuell.
 - **Lebenszeichen** (D-004): Im HEMS-Betrieb gilt ein Sollwert nur bei frischem
-  `sensor.skytech_hems_status`; sonst Stopp. Nach dem Start erst nach einem frisch gesehenen Zyklus.
+  `sensor.hems_schnittstelle` (D-006); sonst Stopp. Nach dem Start erst nach einem frisch
+  gesehenen Zyklus.
 - **Validierung**: Ungültiger Strom oder (bei `automatisch`) ungültige Phasenzahl → Stopp und
   Fehlerstatus; nie auf einen anderen positiven Wert runden.
 - **Befehlsfolge** (D-003): Stopp = Freigabe aus. Positiv = [Phasenmodus, falls geändert] →

@@ -27,7 +27,7 @@ from custom_components.wallbox_provider.models import WallboxState
 PREFIX = "wallbox"
 CURRENT_ENTITY = f"input_number.ems_{PREFIX}_anforderung_leistung_a"
 PHASE_ENTITY = f"input_number.ems_{PREFIX}_anzahl_phase"
-STATUS_ENTITY = "sensor.skytech_hems_status"
+STATUS_ENTITY = "sensor.hems_schnittstelle"
 
 
 @pytest.fixture(autouse=True)
@@ -143,11 +143,16 @@ _counter = 0
 
 
 async def hems_zyklus(hass: HomeAssistant, interval_s: float = 30) -> None:
-    """Einen SkytechHEMS-Zyklus simulieren: das Lebenszeichen ändert seinen Zähler."""
+    """Einen SkytechHEMS-Zyklus simulieren: `sensor.hems_schnittstelle` ändert seinen Zähler.
+
+    State ist die Präfixliste der HEMS-Speicher (HEMS D-069) und bleibt gleich.
+    """
     global _counter
     _counter += 1
     hass.states.async_set(
-        STATUS_ENTITY, str(_counter), {"zyklus_zaehler": _counter, "zyklus_intervall_s": interval_s}
+        STATUS_ENTITY,
+        "acspeicher1",
+        {"zyklus_zaehler": _counter, "zyklus_intervall_s": interval_s},
     )
     await hass.async_block_till_done()
 

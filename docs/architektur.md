@@ -2,7 +2,7 @@
 
 ```text
 SkytechHEMS ── input_number.ems_<prefix>_* ──► HA ──► hems_bridge.py ──► Adapter ──► Wallbox
-SkytechHEMS ── sensor.skytech_hems_status ───► HA ──► heartbeat.py
+SkytechHEMS ── sensor.hems_schnittstelle ───► HA ──► heartbeat.py
 SkytechHEMS ◄── sensor.<provider>_* ── HA ◄── Coordinator ◄── Adapter ◄── Wallbox
 ```
 
