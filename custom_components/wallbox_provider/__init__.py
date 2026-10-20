@@ -28,6 +28,7 @@ from .const import (
 from .coordinator import WallboxConfigEntry, WallboxCoordinator
 from .heartbeat import DEFAULT_TIMEOUT_FACTOR
 from .hems_bridge import WallboxControl
+from .interface import get_interface
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
@@ -62,6 +63,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: WallboxConfigEntry) -> b
     )
     entry.runtime_data = coordinator
     await coordinator.control.async_setup()
+    hems_entity_prefix = entry.data.get(CONF_HEMS_ENTITY_PREFIX)
+    if hems_entity_prefix:
+        # Eine Schnittstellen-Entität für alle Wallboxen (D-007).
+        get_interface(hass).register(hems_entity_prefix, coordinator)
 
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
@@ -84,6 +89,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: WallboxConfigEntry) -> 
         coordinator = entry.runtime_data
         if coordinator.control is not None:
             coordinator.control.async_unload()
+        if entry.data.get(CONF_HEMS_ENTITY_PREFIX):
+            get_interface(hass).unregister(entry.data[CONF_HEMS_ENTITY_PREFIX])
         await coordinator.adapter.close()
     return unloaded
 

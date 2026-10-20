@@ -10,6 +10,14 @@ Einträge werden aus **Nutzersicht** formuliert.
 
 ## Unveröffentlicht
 
+### Hinzugefügt — 20.10.2026
+
+- **Neuer Sensor „Wallbox-Provider-Schnittstelle“** (`sensor.wallbox_provider_schnittstelle`, nur
+  mit SkytechHEMS-Anbindung). Er meldet SkytechHEMS für jede Wallbox, ob sie geregelt werden darf.
+  Gesperrt ist sie, wenn sie nicht erreichbar ist, einen Gerätefehler meldet oder kein Fahrzeug
+  angeschlossen ist. SkytechHEMS gibt den Überschuss dann an andere Verbraucher (ab SkytechHEMS
+  4.0.0).
+
 ### Geändert — 20.10.2026
 
 - Das Lebenszeichen von SkytechHEMS kommt jetzt aus dessen Sensor „HEMS-Schnittstelle“

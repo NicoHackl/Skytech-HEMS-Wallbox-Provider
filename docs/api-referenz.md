@@ -32,6 +32,14 @@ werden beim Anlegen genau so vorgeschlagen; spätere Umbenennungen verwaltet Hom
 `sensor.<prefix>_steuerung`: `hems`, `manuell`, `kein_hems_lebenszeichen`,
 `ungueltiger_sollwert`, `schreibfehler`. Mess-Entities hängen am Poll, Steuer-Entities nicht.
 
+## Schnittstellen-Entität (D-007)
+
+`sensor.wallbox_provider_schnittstelle` — **eine** Entität für alle Wallboxen mit HEMS-Präfix,
+keine Registry-Entität (per `hass.states.async_set`). State: die HEMS-Präfixe, durch Komma
+getrennt. Attribute je Wallbox `<prefix>_freigabe` (Bool) und `<prefix>_sperrgrund`
+(`nicht_erreichbar`, Fehlerart, `kein_fahrzeug`; mehrere mit Komma; `null` ohne Sperre).
+Verbindlich: [Vertrag 2.1](../contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md#provider--hems-sensorwallbox_provider_schnittstelle).
+
 ## `WallboxAdapter`-Protocol (`adapters/base.py`)
 
 | Methode | Zweck |

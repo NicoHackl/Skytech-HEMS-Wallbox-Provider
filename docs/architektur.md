@@ -4,6 +4,7 @@
 SkytechHEMS ── input_number.ems_<prefix>_* ──► HA ──► hems_bridge.py ──► Adapter ──► Wallbox
 SkytechHEMS ── sensor.hems_schnittstelle ───► HA ──► heartbeat.py
 SkytechHEMS ◄── sensor.<provider>_* ── HA ◄── Coordinator ◄── Adapter ◄── Wallbox
+SkytechHEMS ◄── sensor.wallbox_provider_schnittstelle ── HA ◄── interface.py
 ```
 
 | Datei | Verantwortung | Darf nicht |
@@ -12,6 +13,7 @@ SkytechHEMS ◄── sensor.<provider>_* ── HA ◄── Coordinator ◄─
 | `coordinator.py` | Pollen, Takt bei Ausfall auf 30 s strecken, nach Wiederverbindung Sollwert anstoßen | Schreiben |
 | `hems_bridge.py` | Wirksamen Sollwert bilden (Betriebsart, Lebenszeichen, Validierung) und als Befehlsfolge schreiben; Neuschreiben; Stoppvorrang | Register kennen; HEMS-Helfer schreiben |
 | `heartbeat.py` | Regeln des Lebenszeichens, ohne HA-Import | Auf HA zugreifen |
+| `interface.py` | `sensor.wallbox_provider_schnittstelle` für alle Wallboxen mit HEMS-Präfix (D-007): Freigabe und Sperrgrund je Wallbox, per `hass.states.async_set` | Sollwerte schreiben |
 | `adapters/base.py` | `WallboxAdapter`-Protocol, `WallboxAdapterError`, `WallboxFirmwareError` | — |
 | `adapters/goe_modbus.py` | go-e-Register, Umrechnung, Firmware-Prüfung | Steuerlogik |
 | `adapters/modbus_tcp.py` | Modbus TCP (Funktionen 3, 4, 16), eine Sperre je Einzelzugriff | Fachlogik |
