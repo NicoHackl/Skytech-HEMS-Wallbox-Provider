@@ -21,3 +21,5 @@ Geplant: Wattbudget technisch umsetzen, Quellen HEMS/EVMS/manuell trennen, volls
 Rückmeldung und RFID-Scans veröffentlichen. RFID dient externer Fahrzeugzuordnung bei
 offener go-e-Zugangskontrolle, sofern das konkrete Gerät dieses Verhalten bestätigt.
 Noch keine Hardware geliefert; Modell, Firmware, wiederholte Scans und Nebenwirkungen offen.
+
+Einstieg für die weitere Arbeit: [EVMS-Plan und offene Punkte](evms-plan.md).

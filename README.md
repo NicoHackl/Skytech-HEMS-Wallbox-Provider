@@ -38,3 +38,5 @@ Die [Watt-Anbindung](contract/contract_hems_wallbox_provider/watt_contract.md) u
 [EVMS-/RFID-Schnittstelle](contract/contract_evms_wallbox_provider/contract_evms_wallbox_provider.md)
 sind vorbereitet, aber im Provider noch nicht implementiert. Aktuell gilt weiter
 der Ampere-Betrieb. Finalisierung und Abnahme nach Lieferung der go-e.
+
+Einstieg für die weitere Arbeit: [EVMS-Plan und offene Punkte](docs/evms-plan.md).

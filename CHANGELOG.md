@@ -10,6 +10,8 @@ Einträge werden aus **Nutzersicht** formuliert.
 
 ## EVMS-Vorbereitung — 21.10.2026
 
+- Zentralen Provider-Einstieg zu EVMS-Plan, Verträgen und offenen Punkten ergänzt.
+
 - Bilaterale Watt- und EVMS-Verträge sowie Hardwareprüfpunkte ergänzt.
 - Providerlaufzeit unverändert: RFID und Wattumsetzung noch nicht implementiert.
 - Gemeinsames Arbeitspaket EVMS-P0/P1 mit SkytechHEMS, Skytech-EVMS und Data Insight.
