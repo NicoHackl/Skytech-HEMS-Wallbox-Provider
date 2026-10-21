@@ -29,3 +29,15 @@ Unique ID: Seriennummer der Wallbox.
 Beispiel der HEMS-Gerätekonfiguration: [Vertrag](../contract/contract_hems_wallbox_provider/contract_hems_wallbox_provider.md#hems-konfiguration).
 `phase_mode` muss zu HEMS `phases` passen: `automatisch` ↔ `"1,3"`, `fest_1` ↔ `"1"`,
 `fest_3` ↔ `"3"`.
+
+## EVMS-/Watt-Erweiterung — noch nicht implementiert
+
+[Watt-Vertrag mit HEMS](../contract/contract_hems_wallbox_provider/watt_contract.md) und
+[EVMS-Vertrag](../contract/contract_evms_wallbox_provider/contract_evms_wallbox_provider.md)
+sind die autoritativen Erweiterungsdokumente. Der Provider bleibt aktuell beim
+Ampere-Vertrag 2.1. Die HEMS-Vorbereitung allein aktiviert keinen Watt-Betrieb.
+
+Geplant: Wattbudget technisch umsetzen, Quellen HEMS/EVMS/manuell trennen, vollständige
+Rückmeldung und RFID-Scans veröffentlichen. RFID dient externer Fahrzeugzuordnung bei
+offener go-e-Zugangskontrolle, sofern das konkrete Gerät dieses Verhalten bestätigt.
+Noch keine Hardware geliefert; Modell, Firmware, wiederholte Scans und Nebenwirkungen offen.

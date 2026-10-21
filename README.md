@@ -31,3 +31,10 @@ gemeinsamen Regeln stehen im
   es von selbst weiter.
 
 Weitere Doku: [docs/README.md](docs/README.md).
+
+## Geplante Erweiterung EVMS
+
+Die [Watt-Anbindung](contract/contract_hems_wallbox_provider/watt_contract.md) und
+[EVMS-/RFID-Schnittstelle](contract/contract_evms_wallbox_provider/contract_evms_wallbox_provider.md)
+sind vorbereitet, aber im Provider noch nicht implementiert. Aktuell gilt weiter
+der Ampere-Betrieb. Finalisierung und Abnahme nach Lieferung der go-e.

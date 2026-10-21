@@ -8,6 +8,12 @@ Kategorien: `Hinzugefügt`, `Geändert`, `Veraltet`, `Entfernt`, `Behoben`, `Sic
 
 Einträge werden aus **Nutzersicht** formuliert.
 
+## EVMS-Vorbereitung — 21.10.2026
+
+- Bilaterale Watt- und EVMS-Verträge sowie Hardwareprüfpunkte ergänzt.
+- Providerlaufzeit unverändert: RFID und Wattumsetzung noch nicht implementiert.
+- Gemeinsames Arbeitspaket EVMS-P0/P1 mit SkytechHEMS, Skytech-EVMS und Data Insight.
+
 ## Unveröffentlicht
 
 ### Hinzugefügt — 20.10.2026

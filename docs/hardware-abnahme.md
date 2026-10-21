@@ -18,3 +18,22 @@ Firmware und Fahrzeug hier eintragen. Erst danach wird der Vertragsstatus des Pr
 | 10 | Netzwerk trennen während des Ladens | Messwerte nicht verfügbar, Steuerung „schreibfehler"; nach Wiederkehr Sollwert neu | offen |
 | 11 | Schalter „HEMS Steuerung" aus/an | manuelle Werte bzw. HEMS-Sollwert wirken sofort | offen |
 | 12 | Fehlerzustand der Wallbox | Sensor „Fehler" zeigt passenden Wert | offen |
+
+## Erweiterte Abnahme: EVMS, Watt und RFID
+
+Noch keine go-e geliefert; Modell, Firmware und Fahrzeug vor den Tests erfassen.
+
+| Prüfung | Erwartung | Stand |
+|---|---|---|
+| RFID im offenen Zugang, angelernter und nicht angelernter Chip | Kennung lesbar ohne Änderung der Ladefreigabe | offen |
+| Derselbe Chip zweimal, auch nach neuer Verbindung | Zwei unterscheidbare Scans; kein alter Wert als neuer Scan | offen |
+| Scan vor/nach Einstecken und während Laden | Nach festgelegter EVMS-Zuordnungsregel, keine Geräte-Nebenwirkung | offen |
+| Neustart von Wallbox, HA, HEMS, EVMS | Alte Zuordnungen und Budgets nicht ungeprüft fortsetzen | offen |
+| Wattbudgets unter Minimum und an Phasenschwellen | Stopp oder zulässige Stufe ohne Aufrunden über Budget | offen |
+| Abgesenkte Grenze und Stopp bei laufender Umschaltung | Keine veralteten positiven Schritte | offen |
+| Alle drei Steuerungswege separat | Exakt ein Befehlsgeber pro physischem Anschluss | offen |
+| Data-Insight-Ausfall | Regelung unabhängig, Historienlücken/Puffer nachvollziehbar | offen |
+| Zählerauflösung, Ansteck-/Neustart-Reset, Ladepausen | Dokumentierte Sitzungs-/Energiesemantik | offen |
+
+Modbus-UID allein beweist keinen neuen Scan. Zusätzliche API-Lesezeit und
+Freigabe der Kennung prüfen; Transport erst danach verbindlich wählen.

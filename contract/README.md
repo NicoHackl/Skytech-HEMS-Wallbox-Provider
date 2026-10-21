@@ -51,3 +51,14 @@ Dokumentierte Ausnahmen:
 | Gegenstelle | Vertrag | Stand / Hinweise |
 |---|---|---|
 | HEMS | [contract_hems_wallbox_provider.md](contract_hems_wallbox_provider/contract_hems_wallbox_provider.md) | Version 2.1 (Lebenszeichen aus `sensor.hems_schnittstelle`, Freigaben aus `sensor.wallbox_provider_schnittstelle`); in beiden Projekten implementiert, Hardware-Abnahme offen ([docs/hardware-abnahme.md](../docs/hardware-abnahme.md)). |
+
+## EVMS und Watt — Vorbereitung vom 21.10.2026
+
+- [HEMS ↔ Wallbox in Watt](contract_hems_wallbox_provider/watt_contract.md):
+  HEMS implementiert, Provider Entwurf; [gemeinsames Protokoll](contract_hems_wallbox_provider/charging_protocol.md).
+- [EVMS ↔ Wallbox-Provider](contract_evms_wallbox_provider/contract_evms_wallbox_provider.md):
+  Entwurf auf beiden Seiten; Routing, Quellenauswahl, RFID-Scan und Frische.
+
+Die HEMS-Schnittstelle erhält additiv `ladeziele` mit Zuordnungsbestätigungen.
+Der bisherige HEMS-State mit Speicherpräfixen und Ampere-Betrieb bleiben unverändert.
+EVMS ist eine neue geplante Einheit mit `sensor.evms_schnittstelle`.
